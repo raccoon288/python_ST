@@ -1,1 +1,1 @@
-# python_ST
+# Repository for python training on software-testing
