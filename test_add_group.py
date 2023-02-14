@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
+import unittest
+
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
-import unittest, time, re
+from selenium.common.exceptions import NoSuchElementException
 
 
 class TestAddGroup(unittest.TestCase):
     def setUp(self):
-        self.wd = webdriver.Firefox()
+        self.wd = webdriver.Firefox(executable_path=r'C:\Windows\System32\geckodriver.exe',
+                                    firefox_binary=r'C:\Program Files\Mozilla Firefox\firefox.exe')
         self.wd.implicitly_wait(30)
     
     def test_add_group(self):
@@ -37,13 +36,17 @@ class TestAddGroup(unittest.TestCase):
         wd.find_element_by_link_text("Logout").click()
     
     def is_element_present(self, how, what):
-        try: self.wd.find_element(by=how, value=what)
-        except NoSuchElementException as e: return False
+        try:
+            self.wd.find_element(by=how, value=what)
+        except NoSuchElementException:
+            return False
         return True
     
     def is_alert_present(self):
-        try: self.wd.switch_to_alert()
-        except NoAlertPresentException as e: return False
+        try:
+            self.wd.switch_to.alert()
+        except NoAlertPresentException:
+            return False
         return True
 
     def tearDown(self):
