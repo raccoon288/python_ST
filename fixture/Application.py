@@ -46,7 +46,8 @@ class Application:
         wd.find_element_by_name("middlename").send_keys(contact.middlename)
         wd.find_element_by_name("lastname").send_keys(contact.lastname)
         wd.find_element_by_name("nickname").send_keys(contact.nickname)
-        wd.find_element_by_name("photo").send_keys(os.path.join(os.getcwd(), contact.image_name))
+        wd.find_element_by_name("photo").send_keys(os.path.join('C:\Learning\Python_ST_2\python_ST\image',
+                                                                contact.image_name))
         wd.find_element_by_name("title").send_keys(contact.title)
         wd.find_element_by_name("company").send_keys(contact.company)
         wd.find_element_by_name("address").send_keys(contact.address)
