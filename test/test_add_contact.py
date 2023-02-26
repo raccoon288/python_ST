@@ -13,7 +13,7 @@ def app(request):
 
 
 def test_add_contact(app):
-    app.login(login="admin", password="secret")
+    app.session.login(login="admin", password="secret")
     app.add_contact(Contact(firstname="Ivan", middlename="Ivanovich", lastname="Ivanov",
                             nickname="vanek", image_name="test_image.jpg", title="example",
                             company="berc", address="Saint Petersburg, Nevskiy Avenue",
@@ -23,6 +23,6 @@ def test_add_contact(app):
                             bmonth="November", byear="1996", aday="18", amonth="December",
                             ayear="2000", address2="Saint Petersburg, Sadovaya Street",
                             phone2="Saint Petersburg", notes="lalalala"))
-    app.logout()
+    app.session.logout()
 
 
