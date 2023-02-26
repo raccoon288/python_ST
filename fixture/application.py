@@ -2,6 +2,7 @@ import os
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from fixture.session import SessionHelper
+from fixture.group import GroupHelper
 
 
 class Application:
@@ -10,27 +11,11 @@ class Application:
                                     firefox_binary=r'C:\Program Files\Mozilla Firefox\firefox.exe')
         self.wd.implicitly_wait(30)
         self.session = SessionHelper(self)
+        self.group = GroupHelper(self)
 
     def open_home_page(self):
         wd = self.wd
         wd.get("http://localhost/addressbook/")
-
-    def open_group_page(self):
-        wd = self.wd
-        wd.find_element_by_link_text("groups").click()
-
-    def create_group(self, group):
-        wd = self.wd
-        self.open_group_page()
-        # init group creation
-        wd.find_element_by_name("new").click()
-        # fill group form
-        wd.find_element_by_name("group_name").send_keys(group.name)
-        wd.find_element_by_name("group_header").send_keys(group.header)
-        wd.find_element_by_name("group_footer").send_keys(group.footer)
-        # submit group creation
-        wd.find_element_by_name("submit").click()
-        self.return_to_group_page()
 
     def add_contact(self, contact):
         wd = self.wd
@@ -70,10 +55,6 @@ class Application:
         # submit
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
         self.return_to_home_page()
-
-    def return_to_group_page(self):
-        wd = self.wd
-        wd.find_element_by_link_text("group page").click()
 
     def return_to_home_page(self):
         wd = self.wd
