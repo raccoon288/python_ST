@@ -15,6 +15,9 @@ class ContactHelper:
         wd.find_element_by_name("middlename").send_keys(contact.middlename)
         wd.find_element_by_name("lastname").send_keys(contact.lastname)
         wd.find_element_by_name("nickname").send_keys(contact.nickname)
+        # if contact.image_name != "":
+        #     wd.find_element_by_name("photo").send_keys(os.path.join(os.path.dirname(os.getcwd()), "image",
+        #                                                             contact.image_name))
         if contact.image_name != "":
             wd.find_element_by_name("photo").send_keys(os.path.join('C:\Learning\Python_ST_2\python_ST\image',
                                                                     contact.image_name))
@@ -40,5 +43,4 @@ class ContactHelper:
         wd.find_element_by_name("notes").send_keys(contact.notes)
         # submit
         wd.find_element_by_name("submit").click()
-        # wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
         self.app.navigation.return_to_home_page()
