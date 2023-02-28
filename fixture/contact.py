@@ -71,6 +71,17 @@ class ContactHelper:
         wd.find_element_by_xpath("//input[@type='submit'][@value='Update']").click()
         self.app.navigation.return_to_home_page()
 
+    def modify_first_contact_photo(self, contact):
+        wd = self.app.wd
+        # select contact and edit
+        wd.find_element_by_xpath("//img[@title='Edit']").click()
+        # change photo
+        wd.find_element_by_name("photo").send_keys(os.path.join('C:\Learning\Python_ST_2\python_ST\image',
+                                                                contact.image_name))
+        # submit
+        wd.find_element_by_xpath("//input[@type='submit'][@value='Update']").click()
+        self.app.navigation.return_to_home_page()
+
     def modify_first_contact_company(self, contact):
         wd = self.app.wd
         # select contact and edit

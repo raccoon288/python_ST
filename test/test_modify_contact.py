@@ -8,6 +8,12 @@ def test_modify_first_contact_name(app):
     app.session.logout()
 
 
+def test_modify_first_contact_photo(app):
+    app.session.login(login="admin", password="secret")
+    app.contact.modify_first_contact_photo(Contact(image_name="test_image2.jpg"))
+    app.session.logout()
+
+
 def test_modify_first_contact_company(app):
     app.session.login(login="admin", password="secret")
     app.contact.modify_first_contact_company(Contact(title="lalala", company="lalala",
