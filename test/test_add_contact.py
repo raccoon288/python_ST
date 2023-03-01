@@ -20,7 +20,7 @@ def test_add_contact(app):
 def test_add_empty_contact(app):
     app.session.login(login="admin", password="secret")
     app.contact.create(Contact(firstname="", middlename="", lastname="",
-                               nickname="", image_name="", title="",
+                               nickname="", image_name=None, title="",
                                company="", address="",
                                home_number="", mobile_number="", work_number="",
                                fax="", email="", email2="",
