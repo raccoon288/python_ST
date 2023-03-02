@@ -45,6 +45,11 @@ class ContactHelper:
                 wd.find_element_by_name(field_name).clear()
                 wd.find_element_by_name(field_name).send_keys(text)
 
+    def count(self):
+        wd = self.app.wd
+        self.app.navigation.return_to_home_page()
+        return len(wd.find_elements_by_name("selected[]"))
+
     def create(self, contact):
         wd = self.app.wd
         # init add contact
