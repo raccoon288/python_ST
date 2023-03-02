@@ -4,7 +4,6 @@ from model.contact import Contact
 
 
 def test_add_contact(app):
-    app.session.login(login="admin", password="secret")
     app.contact.create(Contact(firstname="Ivan", middlename="Ivanovich", lastname="Ivanov",
                                nickname="vanek", image_name="test_image.jpg", title="example",
                                company="berc", address="Saint Petersburg, Nevskiy Avenue",
@@ -14,11 +13,9 @@ def test_add_contact(app):
                                bmonth="November", byear="1996", aday="30", amonth="December",
                                ayear="2000", address2="Saint Petersburg, Sadovaya Street",
                                phone2="Saint Petersburg", notes="la"))
-    app.session.logout()
 
 
 def test_add_empty_contact(app):
-    app.session.login(login="admin", password="secret")
     app.contact.create(Contact(firstname="", middlename="", lastname="",
                                nickname="", image_name=None, title="",
                                company="", address="",
@@ -28,6 +25,5 @@ def test_add_empty_contact(app):
                                bmonth="", byear="", aday="", amonth="",
                                ayear="", address2="",
                                phone2="", notes=""))
-    app.session.logout()
 
 
