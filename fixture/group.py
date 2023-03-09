@@ -42,7 +42,6 @@ class GroupHelper:
             groups.append(Group(name=text, id=id))
         return groups
 
-
     def create(self, group):
         wd = self.app.wd
         self.open_group_page()
