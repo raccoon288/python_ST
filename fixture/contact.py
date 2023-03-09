@@ -1,4 +1,8 @@
 import os
+from model.contact import Contact
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as ec
 
 
 class ContactHelper:
@@ -50,6 +54,17 @@ class ContactHelper:
         self.app.navigation.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
+    def get_contact_list(self):
+        wd = self.app.wd
+        self.app.navigation.open_home_page()
+        contacts = []
+        for element in wd.find_elements_by_xpath("//tr[@name='entry']"):
+            lastname = element.find_element_by_xpath("./td[2]").text
+            firstname = element.find_element_by_xpath("./td[3]").text
+            id = element.find_element_by_name("selected[]").get_attribute("id")
+            contacts.append(Contact(lastname=lastname, firstname=firstname, id=id))
+        return contacts
+
     def create(self, contact):
         wd = self.app.wd
         # open home page
@@ -72,6 +87,7 @@ class ContactHelper:
         wd.find_element_by_xpath("//input[@type='button'][@value='Delete']").click()
         wd.switch_to.alert.accept()
         self.app.navigation.return_to_home_page()
+        WebDriverWait(wd, 5).until(ec.presence_of_element_located((By.CSS_SELECTOR, "div.msgbox")))
 
     def modify_first(self, contact):
         wd = self.app.wd
