@@ -16,6 +16,14 @@ class GroupHelper:
         if not (wd.current_url.endswith("/group.php") and len(wd.find_elements_by_name("new")) > 0):
             wd.find_element_by_link_text("group page").click()
 
+    def select_first_group(self):
+        wd = self.app.wd
+        wd.find_element_by_name("selected[]").click()
+
+    def select_group_by_index(self, index):
+        wd = self.app.wd
+        wd.find_elements_by_name("selected[]")[index].click()
+
     def fill_group_form(self, group):
         self.fill_field_value("group_name", group.name)
         self.fill_field_value("group_header", group.header)
@@ -58,21 +66,25 @@ class GroupHelper:
         self.group_cache = None
 
     def delete_first(self):
+        self.delete_group_by_index(0)
+
+    def delete_group_by_index(self, index):
         wd = self.app.wd
         self.open_group_page()
-        # select group
-        wd.find_element_by_name("selected[]").click()
+        self.select_group_by_index(index)
         # delete group
         wd.find_element_by_name("delete").click()
         self.return_to_group_page()
         # reset cash
         self.group_cache = None
 
-    def modify_first(self, group):
+    def modify_first(self):
+        self.modify_group_by_index(0)
+
+    def modify_group_by_index(self, index, group):
         wd = self.app.wd
         self.open_group_page()
-        # select group
-        wd.find_element_by_name("selected[]").click()
+        self.select_group_by_index(index)
         # edit group
         wd.find_element_by_name("edit").click()
         # change
