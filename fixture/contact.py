@@ -3,6 +3,7 @@ from model.contact import Contact
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
+import re
 
 
 class ContactHelper:
@@ -54,6 +55,24 @@ class ContactHelper:
         self.app.navigation.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
+    def clear_symbols_in_phones(self, phone):
+        return re.sub("[() -]", "", phone)
+
+    def select_contact_by_index(self, index):
+        wd = self.app.wd
+        self.app.navigation.open_home_page()
+        wd.find_elements_by_name("selected[]")[index].click()
+
+    def open_contact_to_edit_by_index(self, index):
+        wd = self.app.wd
+        self.app.navigation.open_home_page()
+        wd.find_elements_by_xpath("//img[@title='Edit']")[index].click()
+
+    def open_contact_to_view_by_index(self, index):
+        wd = self.app.wd
+        self.app.navigation.open_home_page()
+        wd.find_elements_by_xpath("//img[@title='Details']")[index].click()
+
     contact_cache = None
 
     def get_contact_list(self):
@@ -65,8 +84,36 @@ class ContactHelper:
                 lastname = element.find_element_by_xpath("./td[2]").text
                 firstname = element.find_element_by_xpath("./td[3]").text
                 id = element.find_element_by_name("selected[]").get_attribute("id")
-                self.contact_cache.append(Contact(lastname=lastname, firstname=firstname, id=id))
+                all_phones = element.find_element_by_xpath("./td[6]").text.splitlines()
+                self.contact_cache.append(Contact(lastname=lastname, firstname=firstname, id=id,
+                                                  home_number=all_phones[0], mobile_number=all_phones[1],
+                                                  work_number=all_phones[2], phone2=all_phones[3]))
         return list(self.contact_cache)
+
+    def get_contact_info_from_edit_page(self, index):
+        wd = self.app.wd
+        self.open_contact_to_edit_by_index(index)
+        firstname = wd.find_element_by_name("firstname").get_attribute("value")
+        lastname = wd.find_element_by_name("lastname").get_attribute("value")
+        id = wd.find_element_by_name("id").get_attribute("value")
+        home_number = wd.find_element_by_name("home").get_attribute("value")
+        mobile_number = wd.find_element_by_name("mobile").get_attribute("value")
+        work_number = wd.find_element_by_name("work").get_attribute("value")
+        phone2 = wd.find_element_by_name("phone2").get_attribute("value")
+        return Contact(firstname=firstname, lastname=lastname, id=id,
+                       home_number=home_number, mobile_number=mobile_number,
+                       work_number=work_number, phone2=phone2)
+
+    def get_contact_info_from_view_page(self, index):
+        wd = self.app.wd
+        self.open_contact_to_view_by_index(index)
+        text = wd.find_element_by_id("content").text
+        home_number = re.search("H: (.*)", text).group(1)
+        mobile_number = re.search("M: (.*)", text).group(1)
+        work_number = re.search("W: (.*)", text).group(1)
+        phone2 = re.search("P: (.*)", text).group(1)
+        return Contact(home_number=home_number, mobile_number=mobile_number,
+                       work_number=work_number, phone2=phone2)
 
     def create(self, contact):
         wd = self.app.wd
@@ -89,8 +136,7 @@ class ContactHelper:
         wd = self.app.wd
         # open home page
         self.app.navigation.open_home_page()
-        # select contact
-        wd.find_elements_by_name("selected[]")[index].click()
+        self.select_contact_by_index(index)
         # delete contact
         wd.find_element_by_xpath("//input[@type='button'][@value='Delete']").click()
         wd.switch_to.alert.accept()
@@ -99,15 +145,14 @@ class ContactHelper:
         # reset cash
         self.contact_cache = None
 
-    def modify_first(self, contact):
+    def modify_first(self):
         self.modify_contact_by_index(0)
 
     def modify_contact_by_index(self, index, contact):
         wd = self.app.wd
         # open home page
         self.app.navigation.open_home_page()
-        # select contact and edit
-        wd.find_elements_by_xpath("//img[@title='Edit']")[index].click()
+        self.open_contact_to_edit_by_index(index)
         # change field
         self.fill_contact_form(contact)
         # submit
@@ -115,3 +160,4 @@ class ContactHelper:
         self.app.navigation.return_to_home_page()
         # reset cash
         self.contact_cache = None
+
