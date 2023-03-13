@@ -58,6 +58,24 @@ class ContactHelper:
     def clear_symbols_in_phones(self, phone):
         return re.sub("[() -]", "", phone)
 
+    def merge_all_phones(self, contact):
+        phones_without_none = filter(lambda x: x is not None,
+                                     [contact.home_number,
+                                      contact.mobile_number,
+                                      contact.work_number,
+                                      contact.phone2])
+        phones_without_other_symbols = map(lambda x: self.clear_symbols_in_phones(x), phones_without_none)
+        phones_without_empty_lines = filter(lambda x: x != "", phones_without_other_symbols)
+        return "\n".join(phones_without_empty_lines)
+
+    def merge_all_emails(self, contact):
+        emails_without_none = filter(lambda x: x is not None,
+                                     [contact.email,
+                                      contact.email2,
+                                      contact.email3])
+        emails_without_empty_lines = filter(lambda x: x != "", emails_without_none)
+        return "\n".join(emails_without_empty_lines)
+
     def select_contact_by_index(self, index):
         wd = self.app.wd
         self.app.navigation.open_home_page()
@@ -84,10 +102,11 @@ class ContactHelper:
                 lastname = element.find_element_by_xpath("./td[2]").text
                 firstname = element.find_element_by_xpath("./td[3]").text
                 id = element.find_element_by_name("selected[]").get_attribute("id")
-                all_phones = element.find_element_by_xpath("./td[6]").text.splitlines()
+                all_phones = element.find_element_by_xpath("./td[6]").text
+                all_emails = element.find_element_by_xpath("./td[5]").text
                 self.contact_cache.append(Contact(lastname=lastname, firstname=firstname, id=id,
-                                                  home_number=all_phones[0], mobile_number=all_phones[1],
-                                                  work_number=all_phones[2], phone2=all_phones[3]))
+                                                  all_phones_from_home_page=all_phones,
+                                                  all_emails_from_home_page=all_emails))
         return list(self.contact_cache)
 
     def get_contact_info_from_edit_page(self, index):
@@ -100,9 +119,13 @@ class ContactHelper:
         mobile_number = wd.find_element_by_name("mobile").get_attribute("value")
         work_number = wd.find_element_by_name("work").get_attribute("value")
         phone2 = wd.find_element_by_name("phone2").get_attribute("value")
+        email = wd.find_element_by_name("email").get_attribute("value")
+        email2 = wd.find_element_by_name("email2").get_attribute("value")
+        email3 = wd.find_element_by_name("email3").get_attribute("value")
         return Contact(firstname=firstname, lastname=lastname, id=id,
                        home_number=home_number, mobile_number=mobile_number,
-                       work_number=work_number, phone2=phone2)
+                       work_number=work_number, phone2=phone2,
+                       email=email, email2=email2, email3=email3)
 
     def get_contact_info_from_view_page(self, index):
         wd = self.app.wd
