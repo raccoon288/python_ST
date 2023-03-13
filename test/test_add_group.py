@@ -7,7 +7,9 @@ import string
 
 def random_string(prefix, maxlen):
     symbols = string.ascii_letters + string.digits + " "*10
-    return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
+    random_len = random.randrange(maxlen)
+    random_line = [random.choice(symbols) for i in range(random_len)]
+    return prefix + "".join(random_line)
 
 
 # testdata = [Group(name="", header="", footer="")] + \
