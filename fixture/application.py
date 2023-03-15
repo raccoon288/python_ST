@@ -6,14 +6,21 @@ from fixture.navigation import NavigationHelper
 
 
 class Application:
-    def __init__(self):
-        self.wd = webdriver.Firefox(executable_path=r'C:\Windows\System32\geckodriver.exe',
-                                    firefox_binary=r'C:\Program Files\Mozilla Firefox\firefox.exe')
-        self.wd.implicitly_wait(1)
+    def __init__(self, browser, base_url):
+        if browser == "firefox":
+            self.wd = webdriver.Firefox(firefox_binary=r'C:\Program Files\Mozilla Firefox\firefox.exe')
+        elif browser == "chrome":
+            self.wd = webdriver.Chrome()
+        elif browser == "opera":
+            self.wd = webdriver.Opera()
+        else:
+            raise ValueError("Unrecognized browser %s" % browser)
+        self.wd.implicitly_wait(2)
         self.session = SessionHelper(self)
         self.group = GroupHelper(self)
         self.contact = ContactHelper(self)
         self.navigation = NavigationHelper(self)
+        self.base_url = base_url
 
     def is_valid(self):
         try:

@@ -163,8 +163,8 @@ class ContactHelper:
         # delete contact
         wd.find_element_by_xpath("//input[@type='button'][@value='Delete']").click()
         wd.switch_to.alert.accept()
+        WebDriverWait(wd, 1).until(ec.presence_of_element_located((By.CSS_SELECTOR, "div.msgbox")))
         self.app.navigation.return_to_home_page()
-        WebDriverWait(wd, 5).until(ec.presence_of_element_located((By.CSS_SELECTOR, "div.msgbox")))
         # reset cash
         self.contact_cache = None
 
