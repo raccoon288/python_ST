@@ -82,6 +82,11 @@ class ContactHelper:
         self.app.navigation.open_home_page()
         wd.find_elements_by_name("selected[]")[index].click()
 
+    def select_contact_by_id(self, id):
+        wd = self.app.wd
+        self.app.navigation.open_home_page()
+        wd.find_element_by_css_selector("input[value='%s']" % id).click()
+
     def open_contact_to_edit_by_index(self, index):
         wd = self.app.wd
         self.app.navigation.open_home_page()
@@ -161,6 +166,19 @@ class ContactHelper:
         # open home page
         self.app.navigation.open_home_page()
         self.select_contact_by_index(index)
+        # delete contact
+        wd.find_element_by_xpath("//input[@type='button'][@value='Delete']").click()
+        wd.switch_to.alert.accept()
+        WebDriverWait(wd, 1).until(ec.presence_of_element_located((By.CSS_SELECTOR, "div.msgbox")))
+        self.app.navigation.return_to_home_page()
+        # reset cash
+        self.contact_cache = None
+
+    def delete_contact_by_id(self, id):
+        wd = self.app.wd
+        # open home page
+        self.app.navigation.open_home_page()
+        self.select_contact_by_id(id)
         # delete contact
         wd.find_element_by_xpath("//input[@type='button'][@value='Delete']").click()
         wd.switch_to.alert.accept()
