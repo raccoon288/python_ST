@@ -108,3 +108,17 @@ class GroupHelper:
         self.return_to_group_page()
         # reset cash
         self.group_cache = None
+
+    def modify_group_by_id(self, group):
+        wd = self.app.wd
+        self.open_group_page()
+        self.select_group_by_id(group.id)
+        # edit group
+        wd.find_element_by_name("edit").click()
+        # change
+        self.fill_group_form(group)
+        # submit
+        wd.find_element_by_name("update").click()
+        self.return_to_group_page()
+        # reset cash
+        self.group_cache = None
