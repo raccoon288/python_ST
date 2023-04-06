@@ -221,3 +221,21 @@ class ContactHelper:
         # reset cash
         self.contact_cache = None
 
+    def add_contact_to_group(self, contact, group):
+        wd = self.app.wd
+        # open home page
+        self.app.navigation.open_home_page()
+        # select contact
+        self.select_contact_by_id(contact.id)
+        # select group
+        self.app.group.select_group_by_id_on_homepage(group.id)
+        # submit
+        wd.find_element_by_xpath("//input[@type='submit'][@value='Add to']").click()
+        # return to homepage
+        self.app.navigation.return_to_home_page()
+        self.contact_cache = None
+
+
+
+
+

@@ -28,6 +28,10 @@ class GroupHelper:
         wd = self.app.wd
         wd.find_element_by_css_selector("input[value='%s']" % id).click()
 
+    def select_group_by_id_on_homepage(self, id):
+        wd = self.app.wd
+        wd.find_element_by_xpath("//select[@name='to_group']//option[@value='%s']" % id).click()
+
     def fill_group_form(self, group):
         self.fill_field_value("group_name", group.name)
         self.fill_field_value("group_header", group.header)
