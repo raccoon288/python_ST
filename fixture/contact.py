@@ -228,9 +228,23 @@ class ContactHelper:
         # select contact
         self.select_contact_by_id(contact.id)
         # select group
-        self.app.group.select_group_by_id_on_homepage(group.id)
+        self.app.group.select_group_to_add_by_id_on_homepage(group.id)
         # submit
         wd.find_element_by_xpath("//input[@type='submit'][@value='Add to']").click()
+        # return to homepage
+        self.app.navigation.return_to_home_page()
+        self.contact_cache = None
+
+    def delete_contact_from_group(self, contact, group):
+        wd = self.app.wd
+        # open home page
+        self.app.navigation.open_home_page()
+        # select group
+        self.app.group.select_group_to_delete_by_id_on_homepage(group.id)
+        # select contact
+        wd.find_element_by_css_selector("input[value='%s']" % contact.id).click()
+        # submit
+        wd.find_element_by_xpath("//input[@type='submit'][@name='remove']").click()
         # return to homepage
         self.app.navigation.return_to_home_page()
         self.contact_cache = None
