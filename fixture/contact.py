@@ -43,7 +43,7 @@ class ContactHelper:
         if text is not None:
             if field_name == "photo":
                 head_path = os.path.split(os.getcwd())[0]
-                path = os.path.join(head_path, "image", text)
+                path = os.path.join(head_path, "addressbook tests\image", text)
                 wd.find_element_by_name(field_name).send_keys(path)
             elif field_name == "bday" or field_name == "bmonth" or field_name == "aday" or field_name == "amonth":
                 wd.find_element_by_name(field_name).send_keys(text)
